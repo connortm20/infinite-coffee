@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+.env*
+
+.poetry-cache/
+.pytest_cache/
+
+.vscode/
+
+weight.json
