@@ -5,12 +5,16 @@ from scale import get_stored_readings, save_stored_readings, read_scale
 from calculations import update_daily_weights, is_coffee_needed
 from messaging import send_message
 from logger import setup_logging
+from dotenv import load_dotenv
+
 
 setup_logging()
 logger = logging.getLogger(__name__)
 
 
 def main():
+    load_dotenv()
+
     if len(sys.argv) == 2:
         current_scale_reading = float(sys.argv[1])
         logger.debug(f'weight reading from incoming argv saved as {current_scale_reading}')
