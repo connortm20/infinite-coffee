@@ -2,7 +2,7 @@ import logging
 import sys
 
 from scale import get_stored_readings, save_stored_readings, read_scale
-from calculations import update_daily_weights
+from calculations import update_daily_weights, is_coffee_needed
 from messaging import send_message
 from logger import setup_logging
 
@@ -25,8 +25,11 @@ def main():
 
     new_weight_state = update_daily_weights(weight_state, current_scale_reading)
 
-
     save_stored_readings(new_weight_state)
+
+    if is_coffee_needed(current_scale_reading, new_weight_state['emea']):
+        print('TIME TO ORDER COFFEE')
+
 
 if __name__ == '__main__':
     main()
