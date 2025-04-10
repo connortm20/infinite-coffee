@@ -3,7 +3,7 @@ import sys
 
 from scale import get_stored_readings, save_stored_readings, read_scale
 from calculations import update_daily_weights
-
+from messaging import send_message
 from logger import setup_logging
 
 setup_logging()
