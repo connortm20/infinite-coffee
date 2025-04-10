@@ -1,18 +1,27 @@
 import logging
-from logger import setup_logging
-setup_logging()
-logger = logging.getLogger(__name__)
+import sys
 
 from scale import get_stored_readings, save_stored_readings, read_scale
 from calculations import update_daily_weights
 
+from logger import setup_logging
+
+setup_logging()
+logger = logging.getLogger(__name__)
+
+
 def main():
+    if len(sys.argv) == 2:
+        current_scale_reading = float(sys.argv[1])
+        logger.debug(f'weight reading from incoming argv saved as {current_scale_reading}')
+    else:
+        current_scale_reading = read_scale()
+        logger.debug(f'weight reading from default function saved as {current_scale_reading}')
+
     logger.info("starting daily coffee consumption analysis")
 
-    current_scale_reading = read_scale()
-
     weight_state = get_stored_readings()
-    logger.info(f"current weight_tracking_state: {weight_state}")
+    logger.debug(f"current weight_tracking_state: {weight_state}")
 
     new_weight_state = update_daily_weights(weight_state, current_scale_reading)
 

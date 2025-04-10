@@ -9,7 +9,7 @@ PERSISTENT_DATA_FILE = Path('weight.json')
 
 def read_scale() -> float:
     reading = 69.69
-    logger.info(f"Weight reading of '{reading}' recorded")
+    logger.debug(f"Weight reading of '{reading}' recorded")
     return reading
 
 
@@ -41,5 +41,5 @@ def save_stored_readings(state: dict) -> None:
     '''
     with PERSISTENT_DATA_FILE.open('w') as f:
         json.dump(state, f, indent=4)
-        logger.info(f"Saved weight statistic: {state} to {PERSISTENT_DATA_FILE}")
+        logger.debug(f"Saved weight statistic: {state} to {PERSISTENT_DATA_FILE}")
         

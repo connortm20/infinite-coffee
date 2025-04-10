@@ -6,10 +6,6 @@ def setup_logging():
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)  # Capture all levels of log messages
 
-    # Remove any existing handlers to avoid duplicate logs
-    if root_logger.hasHandlers():
-        root_logger.handlers.clear()
-
     # Create a stream handler that outputs to stdout
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG)  # Set handler to show all messages
