@@ -4,6 +4,7 @@ http wrapper to handle api requests differences when running on python vs microp
 
 import os
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +14,10 @@ try:
 except ImportError:
     import requests
 
-def get(url, data, headers=None):
+def get(url, headers=None):
     res = requests.get(url, headers=headers)
     return res
 
-def post(url: str, data: dict, headers: dict=None):
-    res = requests.post(url, data=data, headers=headers)
+def post(url: str, data=None, headers: dict=None):
+    res = requests.post(url, data=data, headers=headers,)
     return res
