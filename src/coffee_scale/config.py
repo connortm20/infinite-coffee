@@ -7,16 +7,18 @@ logger = logging.getLogger(__name__)
 
 
 REQUIRED_VARS = [
-    'TWILIO_ACCOUNT_SID',
-    'TWILIO_AUTH_TOKEN',
-    'FROM_PHONE_NUMBER',
+    'TEXTBELT_KEY',
     'TO_PHONE_NUMBER',
+    'WEBHOOK_URL',
+    'WEBHOOK_PORT',
+    'WEBHOOK_TIMEOUT',
     'TERMINAL_SHOP_TOKEN'
 ]
-TWILIO_ACCOUNT_SID: Optional[str] = None
-TWILIO_AUTH_TOKEN: Optional[str] = None
-FROM_PHONE_NUMBER: Optional[str] = None
+TEXTBELT_KEY: Optional[str] = None
 TO_PHONE_NUMBER: Optional[str] = None
+WEBHOOK_URL: Optional[str] = None
+WEBHOOK_PORT: Optional[str] = None
+WEBHOOK_TIMEOUT: Optional[str] = None
 TERMINAL_SHOP_TOKEN: Optional[str] = None
 
 

@@ -19,8 +19,12 @@ def is_coffee_needed(current_weight: float, current_emea: float) -> bool:
     '''
         determine if the estimated days before you run out of coffee falls close enough to the configured standard shipping time
     '''
+    if current_emea == 0:
+        logger.info('Current average rate of change is 0. Prediction dates would be invalid.')
+        return False
+
     if current_emea > 0:
-        logger.info('current coffee daily loss is positive. Predictions for date of zero coffee would not be currently accurate')
+        logger.info('Current coffee daily loss is positive. Predictions for date of zero coffee would not be currently accurate')
         return False
 
     days_remaining = abs(current_weight / current_emea)
