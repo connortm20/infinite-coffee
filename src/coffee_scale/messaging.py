@@ -4,7 +4,7 @@ import socket
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from http_client import get, post
+from http_client import post
 from config import TEXTBELT_KEY, TO_PHONE_NUMBER, WEBHOOK_URL, WEBHOOK_PORT, WEBHOOK_TIMEOUT
 
 
@@ -87,6 +87,7 @@ def send_message_and_wait() -> bool:
 
     logger.info('Sending configured alert message')
     res = post(url, data)
+    logger.debug(f'Message send response: {res.text}')
 
     if res.status_code != 200:
         logging.error(f'sms message did not receive success code. res: {res.text}')
@@ -102,6 +103,18 @@ def send_message_and_wait() -> bool:
     
     logger.debug(f'Webhook received: {webhook_res}')
 
+    #light validation for webhook post
+    rec_textId = str(webhook_res['body']['textId'])
+    if rec_textId != sent_textId:
+        logger.error(f'MISMATCH TEXTID BETWEEN SENT AND RECEIVED MESSAGES. post received : {webhook_res.text}')
+        raise Exception('invalid or corrupt webhook data recieved')
+
+    rec_from_number = str(webhook_res['body']['fromNumber'])
+    if rec_from_number != TO_PHONE_NUMBER:
+        logger.error(f'MISMATCH FROMNUMBER BETWEEN SENT AND RECEIVED MESSAGES. post received : {webhook_res.text}')
+        raise Exception('invalid or corrupt webhook data recieved')
+   
+   
     message_text = str(webhook_res['body']['text'])
     if message_text.strip().lower() == 'y':
         return True
