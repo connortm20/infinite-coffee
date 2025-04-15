@@ -2,14 +2,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-EWMA_ALPHA = .5 #alpha parameter for EWEA i.e. smoothing. Value 0 - 1. Larger values correlate to newer values affecting the average by a greater degree
-STANDARD_DELIVERY_TIME = 5 #time in days estimate for coffee to go from order to doorstep
+from config import config
+EWMA_ALPHA = config['EWMA_ALPHA']
+STANDARD_DELIVERY_TIME = config['STANDARD_DELIVERY_TIME']
 
 def update_daily_weights(state: dict, new_reading: float) -> dict:
     if state['last_reading'] is None:
         return {'emea': 0.0, 'last_reading': new_reading}
-        
+    
+    if state['emea'] == 0.0:
+        return {'emea': new_reading - state['last_reading'], 'last_reading': new_reading}
+                
     delta = new_reading - state['last_reading']
     emea = EWMA_ALPHA * delta + (1 - EWMA_ALPHA) * state['emea'] #Exponetial Weighted Moving Average Calculation
     return {'emea': emea, 'last_reading': new_reading}

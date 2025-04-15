@@ -5,8 +5,13 @@ import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from http_client import post
-from config import TEXTBELT_KEY, TO_PHONE_NUMBER, WEBHOOK_URL, WEBHOOK_PORT, WEBHOOK_TIMEOUT
+from config import config
 
+TEXTBELT_KEY = config['TEXTBELT_KEY']
+TO_PHONE_NUMBER = config['TO_PHONE_NUMBER']
+WEBHOOK_URL = config['WEBHOOK_URL']
+WEBHOOK_PORT = config['WEBHOOK_PORT']
+WEBHOOK_TIMEOUT = config['WEBHOOK_TIMEOUT']
 
 logger = logging.getLogger(__name__)
 

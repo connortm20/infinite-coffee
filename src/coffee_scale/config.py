@@ -1,40 +1,51 @@
 import os
 from dotenv import load_dotenv
-from typing import Optional
+from typing import Callable, Any, Dict
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-REQUIRED_VARS = [
-    'TEXTBELT_KEY',
-    'TO_PHONE_NUMBER',
-    'WEBHOOK_URL',
-    'WEBHOOK_PORT',
-    'WEBHOOK_TIMEOUT',
-    'TERMINAL_SHOP_TOKEN'
-]
-TEXTBELT_KEY: Optional[str] = None
-TO_PHONE_NUMBER: Optional[str] = None
-WEBHOOK_URL: Optional[str] = None
-WEBHOOK_PORT: Optional[str] = None
-WEBHOOK_TIMEOUT: Optional[str] = None
-TERMINAL_SHOP_TOKEN: Optional[str] = None
+def load_env_config(required_vars: dict[str, Callable[[str], Any]]) -> Dict[str, Any]:
+    '''
+    Loads all configured env variables into the config dictionary as their mapped types
+    '''
+    load_dotenv()
 
-
-def load_required_vars(required_vars: list[str]):
+    config = {}
     missing_vars = []
+    failed_conversions = []
+    
+    for var,type in required_vars.items():
+        value = os.getenv(var)
 
-    for var in required_vars:
-        val = os.getenv(var)
-        if val is None:
+        if value is None:
             missing_vars.append(var)
-        else:
-            globals()[var] = val
+            continue
+
+        try:
+            config[var] = type(value)
+        except Exception as e:
+            failed_conversions.append(f'{var}:{value}:{type}')
 
     if missing_vars:
-        logger.error(f'Missing env vars detected/failed to load: {missing_vars}')
+        logger.error(f'mising env vars detected : {missing_vars}')
+
+    if failed_conversions:
+        logger.error(f'failed env type conversion : {failed_conversions}')
+
+    return config
 
 
-load_dotenv()
-load_required_vars(REQUIRED_VARS)
+REQUIRED_VARS = {
+    'TEXTBELT_KEY': str,
+    'TO_PHONE_NUMBER': str,
+    'WEBHOOK_URL': str,
+    'WEBHOOK_PORT': str,
+    'WEBHOOK_TIMEOUT': str,
+    'TERMINAL_SHOP_TOKEN': str,
+    'EWMA_ALPHA': float,
+    'STANDARD_DELIVERY_TIME': int,
+}
+
+config = load_env_config(REQUIRED_VARS)

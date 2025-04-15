@@ -1,6 +1,5 @@
 import logging
 import sys
-from dotenv import load_dotenv
 
 from calculations import update_daily_weights, is_coffee_needed
 from coffee import exec_default_order

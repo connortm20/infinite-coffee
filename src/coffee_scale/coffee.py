@@ -3,7 +3,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from http_client import get, post
-from config import TERMINAL_SHOP_TOKEN
+from config import config
+TERMINAL_SHOP_TOKEN = config['TERMINAL_SHOP_TOKEN']
 
 TERMINAL_URL = 'https://api.dev.terminal.shop'
 STANDARD_HEADERS = {
