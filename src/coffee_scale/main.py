@@ -7,7 +7,6 @@ from scale import get_stored_readings, save_stored_readings, read_scale
 from messaging import send_message_and_wait
 from logger import setup_logging
 
-
 setup_logging()
 logger = logging.getLogger(__name__)
 

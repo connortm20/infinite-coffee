@@ -9,7 +9,14 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "python-dotenv (>=1.1.0,<2.0.0)",
-    "requests (>=2.32.3,<3.0.0)"
+    "requests (>=2.32.3,<3.0.0)",
+    "pyserial (>=3.5,<4.0)",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.5,<9.0.0",
+  "pytest-mock>=3.10.0"
 ]
 
 [tool.poetry]
@@ -19,3 +26,13 @@ packages = [{include = "coffee_scale", from = "src"}]
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "8.3.5"
+addopts = [
+  "--maxfail=1",
+  "--disable-warnings",
+  "--strict-markers"
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]

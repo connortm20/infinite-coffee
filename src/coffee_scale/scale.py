@@ -1,16 +1,65 @@
 import json
 from pathlib import Path
 import logging
+from serial import Serial
+import time
 
 logger = logging.getLogger(__name__)
 
 PERSISTENT_DATA_FILE = Path('weight.json')
 
+def init_scale(port : str, init_delay = 10) -> Serial:
+    '''
+    perform and setup or initialization to read from the scale board
+    '''
+    ser = Serial(port, 9600, timeout=1)  
+    time.sleep(init_delay) 
+    ser.reset_input_buffer()
 
-def read_scale() -> float:
-    reading = 69.69
-    logger.debug(f"Weight reading of '{reading}' recorded")
-    return reading
+    return ser
+    
+
+def read_scale(max_attempts:int=10, retry_delay:int=1) -> float:
+    '''
+    attempts to read from serial input and convert reading to grams
+    '''
+    ser = init_scale('COM3')
+
+    if ser is None:
+        logger.error("no serial stream initialized. Unable to read scale data")
+        raise
+
+    try:
+        for attempt in range(1, max_attempts+1):
+            line = ser.readline().decode('utf-8', errors='ignore').strip()
+            logger.debug(f'raw scale line read: "{line}" on read attempt {attempt}')
+        
+            if line and len(line) > 0:
+                break
+
+            time.sleep(retry_delay)
+
+        weight, unit, temp, _ = line.split(',')
+        logger.info('scale reading : "{weight}" with unit : "{unit}"')
+
+        if unit != 'kg':
+            logger.error(f'unit reading from serial did not match expected "kg". unit: {unit}')
+            raise
+
+        weight_in_grams = round(100 * float(weight), 2)
+        return weight_in_grams
+
+
+    except ValueError as e:
+        logger.error("could not parse scale data (%r): %s", line, e)
+        raise
+
+    except Exception as e:
+        logger.exception(f"unexpected error reading scale: {e}")
+        raise
+
+    finally:
+        ser.close()
 
 
 def get_stored_readings() -> dict:
