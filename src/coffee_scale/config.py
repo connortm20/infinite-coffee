@@ -46,6 +46,7 @@ REQUIRED_VARS = {
     'TERMINAL_SHOP_TOKEN': str,
     'EWMA_ALPHA': float,
     'STANDARD_DELIVERY_TIME': int,
+    'DEFAULT_COOLDOWN_LENGTH': int,
 }
 
 config = load_env_config(REQUIRED_VARS)

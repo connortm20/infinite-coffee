@@ -80,7 +80,8 @@ def get_stored_readings() -> dict:
     logger.info(f"Returning default/new weight statistic data")
     return {
         "ewma": None,
-        "last_reading": None
+        "last_reading": None,
+        "order_cooldown": 0
     }
         
 

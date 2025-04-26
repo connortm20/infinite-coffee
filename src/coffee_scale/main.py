@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from calculations import update_daily_weights, is_coffee_needed
+from calculations import update_daily_weights, is_coffee_needed, start_order_cooldown, is_on_order_cooldown
 from coffee import exec_default_order
 from scale import get_stored_readings, save_stored_readings, read_scale
 from messaging import send_message_and_wait
@@ -28,11 +28,16 @@ def main():
 
     save_stored_readings(new_weight_state)
 
+    if is_on_order_cooldown():
+        return
+
     if is_coffee_needed(current_scale_reading, new_weight_state['emea']):
         order_coffee = send_message_and_wait()
 
         if order_coffee:
             exec_default_order()
+            start_order_cooldown()
+
         else:
             logger.info('Not ordering coffee today. Goodbye.')
             
