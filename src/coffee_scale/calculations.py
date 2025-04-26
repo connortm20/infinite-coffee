@@ -14,7 +14,13 @@ def update_daily_weights(state: dict, new_reading: float) -> dict:
         return {'emea': new_reading - state['last_reading'], 'last_reading': new_reading}
                 
     delta = new_reading - state['last_reading']
-    emea = EWMA_ALPHA * delta + (1 - EWMA_ALPHA) * state['emea'] #Exponetial Weighted Moving Average Calculation
+
+    if delta >= 50: #This is to exclude any large positive changes from affecting the running average. If a new bag of coffee is added we should skip that day's reading from going into the average
+        logger.info('Coffee delta exceeded the postive limit and this reading was excluded from the running average')
+        emea = state['emea']
+    else:
+        emea = EWMA_ALPHA * delta + (1 - EWMA_ALPHA) * state['emea'] #Exponetial Weighted Moving Average Calculation
+
     return {'emea': emea, 'last_reading': new_reading}
 
 
