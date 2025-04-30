@@ -6,6 +6,9 @@ import time
 
 logger = logging.getLogger(__name__)
 
+from config import config
+
+SCALE_SERIAL_PORT = config['SCALE_SERIAL_PORT']
 PERSISTENT_DATA_FILE = Path('weight.json')
 
 def init_scale(port : str, init_delay = 10) -> Serial:
@@ -23,7 +26,7 @@ def read_scale(max_attempts:int=10, retry_delay:int=1) -> float:
     '''
     attempts to read from serial input and convert reading to grams
     '''
-    ser = init_scale('COM3')
+    ser = init_scale(SCALE_SERIAL_PORT)
 
     if ser is None:
         logger.error("no serial stream initialized. Unable to read scale data")

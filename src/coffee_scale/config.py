@@ -47,6 +47,7 @@ REQUIRED_VARS = {
     'EWMA_ALPHA': float,
     'STANDARD_DELIVERY_TIME': int,
     'DEFAULT_COOLDOWN_LENGTH': int,
+    'SCALE_SERIAL_PORT': str,
 }
 
 config = load_env_config(REQUIRED_VARS)
