@@ -48,6 +48,7 @@ REQUIRED_VARS = {
     'STANDARD_DELIVERY_TIME': int,
     'DEFAULT_COOLDOWN_LENGTH': int,
     'SCALE_SERIAL_PORT': str,
+    'LOG_FILE_PATH': str
 }
 
 config = load_env_config(REQUIRED_VARS)

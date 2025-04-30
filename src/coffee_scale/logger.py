@@ -1,20 +1,29 @@
 import logging
+import logging.handlers
 import sys
 
+from config import config
+LOG_FILE_PATH = config['LOG_FILE_PATH']
+
 def setup_logging():
-    # Obtain the root logger
     root_logger = logging.getLogger()
-    root_logger.setLevel(logging.DEBUG)  # Capture all levels of log messages
+    root_logger.setLevel(logging.DEBUG)
 
-    # Create a stream handler that outputs to stdout
+    if root_logger.hasHandlers():
+        root_logger.handlers.clear()
+
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(logging.DEBUG)  # Set handler to show all messages
-
-    # Define a formatter for a consistent log message format
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    console_handler.setFormatter(formatter)
-
-    # Add the handler to the root logger
+    console_handler.setLevel(logging.INFO)
+    console_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    console_handler.setFormatter(console_formatter)
     root_logger.addHandler(console_handler)
+
+    file_handler = logging.handlers.RotatingFileHandler(
+        LOG_FILE_PATH, maxBytes=5 * 1024 * 1024, backupCount=5
+    )
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(file_formatter)
+    root_logger.addHandler(file_handler)
     
     return root_logger
