@@ -27,7 +27,11 @@ A lightweight Python app that monitors a connected scale once daily to track cof
 - A personal Textbelt API key
 - A personal Terminal.shop API key
 
-**Note**: The app assumes that you have already saved a default shipping address and payment method in your Terminal.shop account. The top address and card on file will be used when placing an order.
+**Notes**: 
+
+The app assumes that you have already saved a default shipping address and payment method in your Terminal.shop account. The top address and card on file will be used when placing an order.
+
+For the sms reply webhook to reach your machine you must configure your network to forward the posts on your configured port
 
 ### Clone and Install
 
